@@ -1,0 +1,98 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: okm-headstart
+spec:
+  selector:
+      app: okm-headstart
+  ports:
+    - protocol: TCP
+      port: 8080
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: okm-headstart
+spec:
+  selector:
+    matchLabels:
+      app: okm-headstart
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: okm-headstart
+        ID: "15863"
+    spec:
+      containers:
+      - name: okm-headstart
+        image: ghcr.io/acdh-oeaw/linkedcat-deployment/okm-headstart:latest
+        env:
+        - name: JAVA_OPTS
+          value: "-XX:+UseConcMarkSweepGC -XX:MaxHeapFreeRatio=20 -XX:MinHeapFreeRatio=10 -XX:GCTimeRatio=20 -Dlog4j2.formatMsgNoLookups=true"
+        command: []
+        args: [""]
+        resources:
+          limits:
+            memory: 2048Mi
+        stdin: true
+        tty: true
+        ports:
+        - containerPort: 80
+        envFrom:
+        - configMapRef:
+            name: sshoc-env
+        volumeMounts:
+        - mountPath: /var/www/server/preprocessing/conf/config_local.ini
+          name: config-local-ini
+          subPath: ./config_local.ini
+        - mountPath: /var/www/config.js
+          name: config-js
+          subPath: ./config.js
+        - mountPath: /var/www/webpack.config.js
+          name: webpack-config-js
+          subPath: ./webpack.config.js
+
+      initContainers:
+      - name: init-solr
+        image: busybox
+        command: ['sh', '-c', 'until nslookup solr.$(cat /var/run/secrets/kubernetes.io/serviceaccount/namespace).svc.cluster.local; do echo waiting for solr; sleep 2; done;']
+      - name: client-build
+        image: ghcr.io/acdh-oeaw/linkedcat-deployment/okm-headstart:latest
+        command: ['sh', '-c', 'until cd /var/www/ && npm install && npm run prod; do echo Installing client app; sleep 20; done;']
+      volumes:
+          - name: config-local-ini
+            configMap:
+              name: config-local-ini
+          - name: config-js
+            configMap:
+              name: config-js
+          - name: webpack-config-js
+            configMap:
+              name: webpack-config-js
+
+
+---
+
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: okm-headstart
+spec:
+  rules:
+    - host: linkedcat.acdh.oeaw.ac.at
+      http:
+        paths:
+          - backend:
+              service:
+                name: okm-headstart
+                port:
+                  number: 80
+            path: /
+            pathType: Prefix
+  tls:
+    - hosts:
+        - linkedcat.acdh.oeaw.ac.at
+
