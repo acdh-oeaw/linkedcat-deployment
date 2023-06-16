@@ -6,7 +6,7 @@ on:
 
 jobs:
   build:
-    name: Build OKM Headset
+    name: Build OKM Headstart
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -24,7 +24,7 @@ jobs:
       - name: Build and push OKM Headset
         uses: docker/build-push-action@v3
         with:
-          context: okm-headset/.
+          context: okm-headstart/.
           platforms: linux/amd64,linux/arm64
           push: true
           tags: |
