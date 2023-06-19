@@ -33,6 +33,9 @@ RUN cp -r /custom/.htaccess /var/www/linkedcat/
 
 RUN cd /var/www/ && npm install && npm run prod 
 
+RUN rm -f /etc/apache2/sites-enabled/000-default.conf && \
+    cp /custom/000-default.conf /etc/apache2/sites-enabled/000-default.conf
+
 RUN mkdir -p /var/www/exec /var/www/config &&\
-    chown www-data:www-data /var/www && \
+    chown -R www-data:www-data /var/www && \
     rm -fr /custom
