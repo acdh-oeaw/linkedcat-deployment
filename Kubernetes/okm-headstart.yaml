@@ -68,10 +68,8 @@ spec:
         command: ['sh', '-c', 'until nslookup solr.$(cat /var/run/secrets/kubernetes.io/serviceaccount/namespace).svc.cluster.local; do echo waiting for solr; sleep 2; done;']
       volumes:
         - name: sqlite-data
-           persistentVolumeClaim:
-             claimName: sqlite-data
-
-
+          persistentVolumeClaim:
+            claimName: sqlite-data
 
 ---
 
