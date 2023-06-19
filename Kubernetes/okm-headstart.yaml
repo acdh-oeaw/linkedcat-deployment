@@ -42,8 +42,6 @@ spec:
         ports:
         - containerPort: 80
         envFrom:
-        - configMapRef:
-            name: sshoc-env
         volumeMounts:
         - mountPath: /var/www/server/preprocessing/conf/config_local.ini
           name: config-local-ini
