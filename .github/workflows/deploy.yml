@@ -21,7 +21,7 @@ jobs:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-      - name: Build and push OKM Headset
+      - name: Build and push OKM Headstart
         uses: docker/build-push-action@v3
         with:
           context: okm-headstart/.
@@ -31,6 +31,7 @@ jobs:
             ghcr.io/acdh-oeaw/linkedcat-deployment/okm-headstart:latest
   deploy:
     runs-on: ubuntu-latest
+    needs: build
     steps:
     - name: Checkout
       uses: actions/checkout@v3
