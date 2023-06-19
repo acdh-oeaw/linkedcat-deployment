@@ -7,7 +7,7 @@ spec:
       app: okm-headstart
   ports:
     - protocol: TCP
-      port: 8080
+      port: 80
 
 ---
 
