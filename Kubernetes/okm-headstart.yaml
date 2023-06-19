@@ -28,7 +28,7 @@ spec:
     spec:
       containers:
       - name: okm-headstart
-        image: ghcr.io/acdh-oeaw/linkedcat-deployment/okm-headstart:stable
+        image: ghcr.io/acdh-oeaw/linkedcat-deployment/okm-headstart:latest
         env:
         - name: JAVA_OPTS
           value: "-XX:+UseConcMarkSweepGC -XX:MaxHeapFreeRatio=20 -XX:MinHeapFreeRatio=10 -XX:GCTimeRatio=20 -Dlog4j2.formatMsgNoLookups=true"
