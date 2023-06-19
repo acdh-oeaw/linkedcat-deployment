@@ -54,7 +54,8 @@ spec:
         - mountPath: /var/www/webpack.config.js
           name: webpack-config-js
           subPath: ./webpack.config.js
-
+      imagePullSecrets:
+      - name: ghcr.io
       initContainers:
       - name: init-solr
         image: busybox
