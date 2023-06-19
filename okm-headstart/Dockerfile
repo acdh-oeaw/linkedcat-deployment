@@ -9,8 +9,7 @@ ENV DEBIAN_FRONTEND=noninteractive \
     LINKEDCAT_SOLR_PORT="8983" \
     LINKEDCAT_SOLR_PATH="solr/linkedcat2"
 
-RUN apt update && apt full-upgrade -y && \
-    apt install -y supervisor apache2 apache2-utils libapache2-mpm-itk \
+RUN apt update && apt install -y supervisor apache2 apache2-utils libapache2-mpm-itk \
                  links vim locales curl wget \
                  libapache2-mod-php php-cli php-pear php-pgsql php-zip \
                  php-mysql php-gd php-recode php-readline php-json \
