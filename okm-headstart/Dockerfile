@@ -1,4 +1,4 @@
-FROM rocker/r-ver:3.5.3
+FROM rocker/r-ver:4.3.1
 LABEL maintainer="Dalibor Pancic dalibor.pancic@oeaw.ac.at"
 
 ENV DEBIAN_FRONTEND=noninteractive \
