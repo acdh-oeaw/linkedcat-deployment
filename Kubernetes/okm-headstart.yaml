@@ -11,6 +11,21 @@ spec:
 
 ---
 
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: sqlite-data
+spec:
+  accessModes:
+    - ReadWriteOnce
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: "1000Mi"
+  volumeMode: Filesystem
+
+---
+
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -43,18 +58,8 @@ spec:
         - containerPort: 80
         envFrom:
         volumeMounts:
-        - mountPath: /var/www/server/preprocessing/conf/config_local.ini
-          name: config-local-ini
-          subPath: ./config_local.ini
-        - mountPath: /var/www/config.js
-          name: config-js
-          subPath: ./config.js
-        - mountPath: /var/www/webpack.config.js
-          name: webpack-config-js
-          subPath: ./webpack.config.js
-        - mountPath: /etc/supervisor/conf.d/supervisord.conf
-          name: supervisor-config
-          subPath: ./supervisord.conf
+        - name: sqlite-data
+          mountPath: /var/www/server/storage/
       imagePullSecrets:
       - name: ghcr.io
       initContainers:
@@ -62,18 +67,10 @@ spec:
         image: busybox
         command: ['sh', '-c', 'until nslookup solr.$(cat /var/run/secrets/kubernetes.io/serviceaccount/namespace).svc.cluster.local; do echo waiting for solr; sleep 2; done;']
       volumes:
-          - name: config-local-ini
-            configMap:
-              name: config-local-ini
-          - name: config-js
-            configMap:
-              name: config-js
-          - name: webpack-config-js
-            configMap:
-              name: webpack-config-js
-          - name: supervisor-config
-            configMap:
-              name: supervisor-config
+        - name: sqlite-data
+           persistentVolumeClaim:
+             claimName: sqlite-data
+
 
 
 ---
