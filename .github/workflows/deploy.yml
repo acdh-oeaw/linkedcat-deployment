@@ -47,11 +47,13 @@ jobs:
         kubectl -n linkedcat delete configmap config-local-ini
         kubectl -n linkedcat delete configmap config-js
         kubectl -n linkedcat delete configmap webpack-config-js
+        kubectl -n linkedcat delete configmap supervisor-config
     # Create ConfigMaps from the configuration files
     - run: |
         kubectl -n linkedcat create configmap config-local-ini --from-file=./config/config_local.ini
         kubectl -n linkedcat create configmap config-js --from-file=./config/config.js
         kubectl -n linkedcat create configmap webpack-config-js --from-file=./config/webpack.config.js
+        kubectl -n linkedcat create configmap supervisor-config --from-file=./config/supervisord.conf
 
     # Create all the Kubernetes deployments, services and related objects
     - run: kubectl -n linkedcat apply -f Kubernetes/

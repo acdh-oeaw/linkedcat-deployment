@@ -32,8 +32,8 @@ spec:
         env:
         - name: JAVA_OPTS
           value: "-XX:+UseConcMarkSweepGC -XX:MaxHeapFreeRatio=20 -XX:MinHeapFreeRatio=10 -XX:GCTimeRatio=20 -Dlog4j2.formatMsgNoLookups=true"
-        command: ['sh', '-c', 'cd /var/www/ && npm install && npm run prod && /usr/bin/supervisord']
-        args: [""]
+        command: []
+        args: ["/usr/bin/supervisord"]
         resources:
           limits:
             memory: 2048Mi
@@ -52,6 +52,9 @@ spec:
         - mountPath: /var/www/webpack.config.js
           name: webpack-config-js
           subPath: ./webpack.config.js
+        - mountPath: /etc/supervisor/conf.d/supervisord.conf
+          name: supervisor-config
+          subPath: ./supervisord.conf
       imagePullSecrets:
       - name: ghcr.io
       initContainers:
@@ -68,6 +71,9 @@ spec:
           - name: webpack-config-js
             configMap:
               name: webpack-config-js
+          - name: supervisor-config
+            configMap:
+              name: supervisor-config
 
 
 ---
