@@ -34,7 +34,7 @@ RUN cp -r /custom/.htaccess /var/www/linkedcat/
 RUN rm -f /etc/apache2/sites-available/000-default.conf && \
     cp /custom/000-default.conf /etc/apache2/sites-available/ && \
     touch /var/log/apache2/okm.log && \
-    chown -R www-data:www-data /var/log/apache2/okm.log    
+    chown -R www-data:www-data /var/log/apache2   
 
 RUN cd /var/www/ && npm install && npm run prod 
 
