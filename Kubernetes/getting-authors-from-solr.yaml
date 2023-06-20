@@ -20,8 +20,8 @@ spec:
                 - '--force-refresh'
               image: ghcr.io/acdh-oeaw/linkedcat-deployment/okm-headstart:latest
               imagePullPolicy: Always
-          imagePullSecrets:
-          - name: ghcr.io
+              imagePullSecrets:
+              - name: ghcr.io
               name: getting-authors-from-solr
               stdin: true
               terminationMessagePath: /dev/termination-log
