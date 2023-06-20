@@ -57,7 +57,7 @@ spec:
         tty: true
         ports:
         - containerPort: 80
-           volumeMounts:
+        volumeMounts:
         - name: sqlite-data
           mountPath: /var/www/server/storage/
       imagePullSecrets:
