@@ -29,6 +29,8 @@ spec:
                 - mountPath: /var/www/server/storage/
                   name: sqlite-data
           dnsPolicy: ClusterFirst
+          imagePullSecrets:
+            - name: ghcr.io
           restartPolicy: Never
           schedulerName: default-scheduler
           terminationGracePeriodSeconds: 30
