@@ -77,6 +77,12 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: okm-headstart
+  annotations:
+    nginx.ingress.kubernetes.io/client-body-buffer-size: 100m
+    nginx.ingress.kubernetes.io/proxy-body-size: 100m
+    nginx.ingress.kubernetes.io/proxy-connect-timeout: '3600'
+    nginx.ingress.kubernetes.io/proxy-read-timeout: '3600'
+    nginx.ingress.kubernetes.io/proxy-send-timeout: '3600'
 spec:
   rules:
     - host: linkedcat.acdh.oeaw.ac.at
