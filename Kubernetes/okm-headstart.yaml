@@ -44,6 +44,7 @@ spec:
       containers:
       - name: okm-headstart
         image: ghcr.io/acdh-oeaw/linkedcat-deployment/okm-headstart:latest
+        imagePullPolicy: Always
         env:
         - name: JAVA_OPTS
           value: "-XX:+UseConcMarkSweepGC -XX:MaxHeapFreeRatio=20 -XX:MinHeapFreeRatio=10 -XX:GCTimeRatio=20 -Dlog4j2.formatMsgNoLookups=true"
@@ -56,8 +57,7 @@ spec:
         tty: true
         ports:
         - containerPort: 80
-        envFrom:
-        volumeMounts:
+           volumeMounts:
         - name: sqlite-data
           mountPath: /var/www/server/storage/
       imagePullSecrets:
