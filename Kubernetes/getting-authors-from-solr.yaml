@@ -1,0 +1,42 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  generation: 3
+  name: getting-authors-from-solr
+  namespace: linkedcat
+  resourceVersion: '213148124'
+  uid: da74b456-e66d-4b65-bbe1-14122d86f0fd
+spec:
+  concurrencyPolicy: Forbid
+  failedJobsHistoryLimit: 1
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+            - command:
+                - php
+                - /var/www/server/services/getLinkedCatAuthors.php
+                - '--force-refresh'
+              image: ghcr.io/acdh-oeaw/linkedcat-deployment/okm-headstart:latest
+              imagePullPolicy: Always
+              name: getting-authors-from-solr
+              stdin: true
+              terminationMessagePath: /dev/termination-log
+              terminationMessagePolicy: File
+              tty: true
+              volumeMounts:
+                - mountPath: /var/www/server/storage/
+                  name: sqlite-data
+          dnsPolicy: ClusterFirst
+          restartPolicy: Never
+          schedulerName: default-scheduler
+          terminationGracePeriodSeconds: 30
+          volumes:
+            - name: sqlite-data
+              persistentVolumeClaim:
+                claimName: sqlite-data
+  schedule: 00 8 * * *
+  successfulJobsHistoryLimit: 3
+  suspend: false
+
