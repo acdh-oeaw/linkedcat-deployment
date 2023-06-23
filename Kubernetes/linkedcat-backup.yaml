@@ -2,6 +2,7 @@ apiVersion: batch/v1beta1
 kind: CronJob
 metadata:
   name: linkedcat-backup
+  namespace: linkedcat
 spec:
   schedule: "20 3 * * *" 
   successfulJobsHistoryLimit: 3
@@ -29,21 +30,21 @@ spec:
             volumeMounts:
             - mountPath: /backup
               name: linkedcat-backup           
-            - mountPath: /data-solr
-              name: data-solr  
+            - mountPath: /solr-data
+              name: solr-data  
             - mountPath: /sqlite-data
               name: sqlite-data               
             command:
             - /bin/sh
             - -c
-            - find /backup -type f -mtime +10 -delete && cd / && tar -czvf /backup/linkedcat-backup-$(date +"%Y_%m_%d_%H_%M").tar.gz data-solr sqlite-data  
+            - find /backup -type f -mtime +10 -delete && cd / && tar -czvf /backup/linkedcat-backup-$(date +"%Y_%m_%d_%H_%M").tar.gz solr-data sqlite-data  
           volumes:
           - name: linkedcat-backup
             persistentVolumeClaim:
               claimName: linkedcat-backup
-          - name: data-solr
+          - name: solr-data
             persistentVolumeClaim:
-              claimName: data-solr
+              claimName: solr-data
           - name: sqlite-data
             persistentVolumeClaim:
               claimName: sqlite-data

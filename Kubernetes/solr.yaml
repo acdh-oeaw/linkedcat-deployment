@@ -14,7 +14,7 @@ spec:
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: data-solr
+  name: solr-data
 spec:
   accessModes:
     - ReadWriteOnce
@@ -57,9 +57,9 @@ spec:
           ports:
           - containerPort: 8983
           volumeMounts:
-          - name: data-solr
+          - name: solr-data
             mountPath: /opt/solr/server/solr/mycores
       volumes:
-           - name: data-solr
+           - name: solr-data
              persistentVolumeClaim:
-               claimName: data-solr
+               claimName: solr-data
