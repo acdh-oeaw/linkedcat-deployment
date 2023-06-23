@@ -16,10 +16,10 @@ spec:
               requiredDuringSchedulingIgnoredDuringExecution:
                 - labelSelector:
                     matchExpressions:
-                      - key: workload.user.cattle.io/workloadselector
+                      - key: app
                         operator: In
                         values:
-                          - apps.deployment-linkedcat-solr
+                          - solr
                   topologyKey: kubernetes.io/hostname
           containers:
           - name: linkedcat-backup
