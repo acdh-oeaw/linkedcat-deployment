@@ -7,12 +7,23 @@ metadata:
   resourceVersion: '213148124'
   uid: da74b456-e66d-4b65-bbe1-14122d86f0fd
 spec:
+
   concurrencyPolicy: Forbid
   failedJobsHistoryLimit: 1
   jobTemplate:
     spec:
       template:
         spec:
+          affinity:
+            podAffinity:
+              requiredDuringSchedulingIgnoredDuringExecution:
+                - labelSelector:
+                    matchExpressions:
+                      - key: workload.user.cattle.io/workloadselector
+                        operator: In
+                        values:
+                          - apps.deployment-linkedcat-solr
+                  topologyKey: kubernetes.io/hostname
           containers:
             - command:
                 - php

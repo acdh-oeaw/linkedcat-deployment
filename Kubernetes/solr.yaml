@@ -14,7 +14,7 @@ spec:
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: solr-data
+  name: data-solr
 spec:
   accessModes:
     - ReadWriteOnce
@@ -22,6 +22,7 @@ spec:
   resources:
     requests:
       storage: "2000Mi"
+  storageClassName: ceph-rbd-pool
   volumeMode: Filesystem
 
 ---
@@ -56,9 +57,9 @@ spec:
           ports:
           - containerPort: 8983
           volumeMounts:
-          - name: solr-data
+          - name: data-solr
             mountPath: /opt/solr/server/solr/mycores
       volumes:
-           - name: solr-data
+           - name: data-solr
              persistentVolumeClaim:
-               claimName: solr-data
+               claimName: data-solr

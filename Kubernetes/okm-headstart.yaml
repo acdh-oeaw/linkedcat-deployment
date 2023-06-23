@@ -41,6 +41,17 @@ spec:
         app: okm-headstart
         ID: "15863"
     spec:
+      affinity:
+        podAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - labelSelector:
+                matchExpressions:
+                  - key: workload.user.cattle.io/workloadselector
+                    operator: In
+                    values:
+                      - apps.deployment-linkedcat-solr
+              topologyKey: kubernetes.io/hostname
+        podAntiAffinity: {}
       containers:
       - name: okm-headstart
         image: ghcr.io/acdh-oeaw/linkedcat-deployment/okm-headstart:latest
