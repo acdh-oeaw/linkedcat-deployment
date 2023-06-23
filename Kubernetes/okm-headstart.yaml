@@ -64,6 +64,12 @@ spec:
         resources:
           limits:
             memory: 2048Mi
+        securityContext:
+          allowPrivilegeEscalation: true
+          capabilities: {}
+          privileged: true
+          readOnlyRootFilesystem: false
+          runAsUser: 0
         stdin: true
         tty: true
         ports:
