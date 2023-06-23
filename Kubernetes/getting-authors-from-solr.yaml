@@ -7,7 +7,6 @@ metadata:
   resourceVersion: '213148124'
   uid: da74b456-e66d-4b65-bbe1-14122d86f0fd
 spec:
-
   concurrencyPolicy: Forbid
   failedJobsHistoryLimit: 1
   jobTemplate:

@@ -1,0 +1,50 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: linkedcat-backup
+spec:
+  schedule: "20 3 * * *" 
+  successfulJobsHistoryLimit: 3
+  suspend: false
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          affinity:
+            podAffinity:
+              requiredDuringSchedulingIgnoredDuringExecution:
+                - labelSelector:
+                    matchExpressions:
+                      - key: workload.user.cattle.io/workloadselector
+                        operator: In
+                        values:
+                          - apps.deployment-linkedcat-solr
+                  topologyKey: kubernetes.io/hostname
+          containers:
+          - name: linkedcat-backup
+            image: quay.io/toolbx-images/alpine-toolbox:3.18
+            imagePullPolicy: IfNotPresent
+            terminationMessagePath: /dev/termination-log
+            terminationMessagePolicy: File  
+            volumeMounts:
+            - mountPath: /backup
+              name: linkedcat-backup           
+            - mountPath: /data-solr
+              name: data-solr  
+            - mountPath: /sqlite-data
+              name: sqlite-data               
+            command:
+            - /bin/sh
+            - -c
+            - find /backup -type f -mtime +10 -delete && cd / && tar -czvf /backup/linkedcat-backup-$(date +"%Y_%m_%d_%H_%M").tar.gz data-solr sqlite-data  
+          volumes:
+          - name: linkedcat-backup
+            persistentVolumeClaim:
+              claimName: linkedcat-backup
+          - name: data-solr
+            persistentVolumeClaim:
+              claimName: data-solr
+          - name: sqlite-data
+            persistentVolumeClaim:
+              claimName: sqlite-data
+          restartPolicy: OnFailure
