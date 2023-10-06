@@ -63,3 +63,27 @@ spec:
            - name: solr-data
              persistentVolumeClaim:
                claimName: solr-data
+---
+
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: solr
+  annotations:
+    nginx.ingress.kubernetes.io/client-body-buffer-size: 100m
+    nginx.ingress.kubernetes.io/proxy-body-size: 100m
+    nginx.ingress.kubernetes.io/proxy-connect-timeout: '3600'
+    nginx.ingress.kubernetes.io/proxy-read-timeout: '3600'
+    nginx.ingress.kubernetes.io/proxy-send-timeout: '3600'
+spec:
+  rules:
+    - host: linkedcat-solr.acdh-cluster-2.arz.oeaw.ac.at
+      http:
+        paths:
+          - backend:
+              service:
+                name: solr
+                port:
+                  number: 8983
+            path: /
+            pathType: Prefix
